@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {FC, useEffect} from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import {Layout} from "antd";
+import './App.css';
+import {IUser} from "./model/IUser";
+import {Navbar} from "./component/Navbar";
+import {AppRouter} from "./component/AppRouter";
+import {useDispatch} from "react-redux";
+import {AuthActionCreators} from "./store/redusers/auth/actions";
+
+
+const App:FC = () => {
+    const dispatch =useDispatch()
+   // const {setUser, setIsAuth} = useActions();
+
+    useEffect(() => {
+        if(localStorage.getItem('auth')) {
+           dispatch(AuthActionCreators.setUser({username: localStorage.getItem('username' || '')} as IUser))
+            dispatch(AuthActionCreators.setIsAuth(true))
+        }
+    }, [])
+
+    return (
+        <Layout>
+            <Navbar/>
+            <Layout.Content>
+                <AppRouter />
+            </Layout.Content>
+        </Layout>
+    );
+};
 
 export default App;
